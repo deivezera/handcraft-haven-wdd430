@@ -32,11 +32,11 @@ Access the project directory
 Instale as dependências
 
 ```bash
-  pnpm install
+  npm ci
 ```
 
 Inicie o servidor
 
 ```bash
-  pnpm dev
+  npm run dev
 ```
