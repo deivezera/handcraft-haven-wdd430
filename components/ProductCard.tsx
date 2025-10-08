@@ -4,7 +4,7 @@ interface ProductCardProps {
   description: string;
   price: number;
   image: string;
-  artisan: string;
+  artisan: {name: string};
 }
 
 export function ProductCard({ name, description, price, artisan }: ProductCardProps) {
@@ -18,7 +18,7 @@ export function ProductCard({ name, description, price, artisan }: ProductCardPr
         <p className="text-gray-600 mb-4">{description}</p>
         <div className="flex items-center justify-between">
           <span className="text-2xl font-bold text-blue-600">${price}</span>
-          <span className="text-sm text-gray-500">by {artisan}</span>
+          <span className="text-sm text-gray-500">by {artisan.name}</span>
         </div>
       </div>
     </div>

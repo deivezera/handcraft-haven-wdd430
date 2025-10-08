@@ -37,16 +37,7 @@ export async function getFeaturedProducts(limit: number = 3): Promise<FeaturedPr
       orderBy: { createdAt: 'desc' },
       take: limit,
     });
-
-    return ((p): FeaturedProduct => ({
-      id: p.id,
-      name: p.name,
-      description: p.description,
-      price: p.price,
-      image: p.image,
-      artisan: p.artisan?.name ?? 'Unknown',
-      category: p.category?.name ?? null,
-    }));
+    return products;
   } catch (err) {
     console.log('error fetching featured products: ', err)
     throw new Error('Failed to fetch featured products')

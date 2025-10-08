@@ -12,6 +12,7 @@ export default async function Home() {
     getCategories(),
     getUpcomingEvents(2),
   ]);
+  console.log(featuredProducts)
   return (
     <div className="min-h-screen bg-white">
       <Header />
@@ -41,7 +42,7 @@ export default async function Home() {
             Featured Handcrafted Items
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {featuredProducts.map((product: FeaturedProduct) => (
+            {featuredProducts && featuredProducts.map((product: FeaturedProduct) => (
               <ProductCard
                 key={product.id}
                 id={product.id}

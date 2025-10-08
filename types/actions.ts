@@ -4,8 +4,14 @@ export type FeaturedProduct = {
 	description: string;
 	price: number;
 	image: string;
-	artisan: string;
-	category: string | null;
+	featured: boolean;
+	artisan: {name: string};
+	category: {name: string};
+	artisanId: string;
+	categoryId: string;
+	createdAt: Date;
+	updatedAt: Date;
+	inStock: boolean;
 };
 
 export type CategoryItem = {
