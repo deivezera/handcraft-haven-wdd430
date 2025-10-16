@@ -27,6 +27,7 @@ export function ProductForm({ product, onSuccess }: ProductFormProps) {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [categoryName, setCategoryName] = useState<string>(product?.category.name || '');
   const router = useRouter();
 
   useEffect(() => {
@@ -135,7 +136,8 @@ export function ProductForm({ product, onSuccess }: ProductFormProps) {
               id="categoryName"
               name="categoryName"
               required
-              defaultValue={product?.category.name || ''}
+              value={categoryName}
+              onChange={(e) => setCategoryName(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">Select a category</option>

@@ -391,3 +391,223 @@ export async function deleteProductAction(productId: string) {
     };
   }
 }
+
+// Public product listing actions
+export async function getAllProducts(filters?: {
+  category?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  search?: string;
+  sortBy?: 'name' | 'price' | 'createdAt';
+  sortOrder?: 'asc' | 'desc';
+}) {
+  try {
+    const where: {
+      inStock: boolean;
+      category?: { name: string };
+      price?: { gte?: number; lte?: number };
+      OR?: Array<{
+        name?: { contains: string; mode: 'insensitive' };
+        description?: { contains: string; mode: 'insensitive' };
+        artisan?: { name: { contains: string; mode: 'insensitive' } };
+      }>;
+    } = {
+      inStock: true
+    };
+
+    // Apply filters
+    if (filters?.category) {
+      where.category = {
+        name: filters.category
+      };
+    }
+
+    if (filters?.minPrice !== undefined || filters?.maxPrice !== undefined) {
+      where.price = {};
+      if (filters.minPrice !== undefined) {
+        where.price.gte = filters.minPrice;
+      }
+      if (filters.maxPrice !== undefined) {
+        where.price.lte = filters.maxPrice;
+      }
+    }
+
+    if (filters?.search) {
+      where.OR = [
+        { name: { contains: filters.search, mode: 'insensitive' } },
+        { description: { contains: filters.search, mode: 'insensitive' } },
+        { artisan: { name: { contains: filters.search, mode: 'insensitive' } } }
+      ];
+    }
+
+    const orderBy: Record<string, string> = {};
+    if (filters?.sortBy) {
+      orderBy[filters.sortBy] = filters.sortOrder || 'asc';
+    } else {
+      orderBy.createdAt = 'desc'; // Default sort by newest
+    }
+
+    const products = await prisma.product.findMany({
+      where,
+      include: {
+        artisan: {
+          select: { name: true, location: true }
+        },
+        category: {
+          select: { name: true }
+        }
+      },
+      orderBy
+    });
+
+    return products;
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    return [];
+  }
+}
+
+export async function getProductsByCategory(categoryName: string) {
+  try {
+    const products = await prisma.product.findMany({
+      where: {
+        category: { name: categoryName },
+        inStock: true
+      },
+      include: {
+        artisan: {
+          select: { name: true, location: true }
+        },
+        category: {
+          select: { name: true }
+        }
+      },
+      orderBy: { createdAt: 'desc' }
+    });
+
+    return products;
+  } catch (error) {
+    console.error("Error fetching products by category:", error);
+    return [];
+  }
+}
+
+export async function getArtisanWithProducts(artisanId: string) {
+  try {
+    const artisan = await prisma.artisan.findUnique({
+      where: { id: artisanId },
+      select: {
+        id: true,
+        name: true,
+        bio: true,
+        location: true,
+        website: true,
+        avatar: true,
+        products: {
+          where: { inStock: true },
+          orderBy: { createdAt: 'desc' },
+          include: {
+            artisan: { select: { name: true } },
+            category: { select: { name: true } },
+          },
+        },
+      },
+    });
+
+    return artisan;
+  } catch (error) {
+    console.error('Error fetching artisan with products:', error);
+    return null;
+  }
+}
+
+export async function searchProducts(query: string) {
+  try {
+    const products = await prisma.product.findMany({
+      where: {
+        inStock: true,
+        OR: [
+          { name: { contains: query, mode: 'insensitive' } },
+          { description: { contains: query, mode: 'insensitive' } },
+          { artisan: { name: { contains: query, mode: 'insensitive' } } },
+          { category: { name: { contains: query, mode: 'insensitive' } } }
+        ]
+      },
+      include: {
+        artisan: {
+          select: { name: true, location: true }
+        },
+        category: {
+          select: { name: true }
+        }
+      },
+      orderBy: { createdAt: 'desc' }
+    });
+
+    return products;
+  } catch (error) {
+    console.error("Error searching products:", error);
+    return [];
+  }
+}
+
+export async function getProduct(id: string) {
+  try {
+    const product = await prisma.product.findUnique({
+      where: { 
+        id,
+        inStock: true 
+      },
+      include: {
+        artisan: {
+          select: {
+            id: true,
+            name: true,
+            bio: true,
+            location: true,
+            website: true,
+            avatar: true
+          }
+        },
+        category: {
+          select: { name: true }
+        }
+      }
+    });
+
+    return product;
+  } catch (error) {
+    console.error('Error fetching product:', error);
+    return null;
+  }
+}
+
+export async function getRelatedProducts(productId: string, categoryId: string, artisanId: string) {
+  try {
+    const products = await prisma.product.findMany({
+      where: {
+        id: { not: productId },
+        inStock: true,
+        OR: [
+          { categoryId },
+          { artisanId }
+        ]
+      },
+      include: {
+        artisan: {
+          select: { name: true, location: true }
+        },
+        category: {
+          select: { name: true }
+        }
+      },
+      take: 4,
+      orderBy: { createdAt: 'desc' }
+    });
+
+    return products;
+  } catch (error) {
+    console.error('Error fetching related products:', error);
+    return [];
+  }
+}

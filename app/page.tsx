@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ProductCard } from "@/components/ProductCard";
@@ -12,7 +13,6 @@ export default async function Home() {
     getCategories(),
     getUpcomingEvents(2),
   ]);
-  console.log(featuredProducts)
   return (
     <div className="min-h-screen bg-white">
       <Header />
@@ -51,6 +51,8 @@ export default async function Home() {
                 price={product.price}
                 image={product.image}
                 artisan={product.artisan}
+                category={product.category}
+                featured={product.featured}
               />
             ))}
           </div>
@@ -65,12 +67,13 @@ export default async function Home() {
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
             {categories.map((category: CategoryItem, index: number) => (
-              <button
+              <Link
                 key={index}
-                className="bg-gray-900 text-white py-4 px-6 rounded-lg hover:bg-gray-800 transition-colors font-medium"
+                href={`/products?category=${encodeURIComponent(category.name)}`}
+                className="bg-gray-900 text-white py-4 px-6 rounded-lg hover:bg-gray-800 transition-colors font-medium text-center"
               >
                 {category.name}
-              </button>
+              </Link>
             ))}
           </div>
         </div>

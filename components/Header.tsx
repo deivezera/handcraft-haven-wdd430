@@ -1,4 +1,4 @@
-import { Search, ShoppingCart, User, LogOut } from "lucide-react";
+import { Search, User, LogOut } from "lucide-react";
 import { getCurrentArtisan, logoutAction } from "@/app/actions";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -10,35 +10,17 @@ export async function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <div className="flex items-center space-x-2">
+          <Link href="/" className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
             <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-sm">H</span>
             </div>
             <span className="text-xl font-bold text-gray-900">Handcrafted Haven</span>
-          </div>
-
-          {/* Search Bar */}
-          <div className="flex-1 max-w-lg mx-8">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-              <input
-                type="text"
-                placeholder="Search for handcrafted items..."
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            </div>
-          </div>
+          </Link>
 
           {/* Navigation Links */}
           <nav className="hidden md:flex items-center space-x-6">
             <Link href="/" className="text-gray-700 hover:text-blue-600 font-medium">Home</Link>
-            <Link href="#" className="text-gray-700 hover:text-blue-600 font-medium">Product Listings</Link>
-            <Link href="#" className="text-gray-700 hover:text-blue-600 font-medium">Artisan Profiles</Link>
-            <Link href="#" className="text-gray-700 hover:text-blue-600 font-medium flex items-center space-x-1">
-              <ShoppingCart className="w-4 h-4" />
-              <span>Shopping Cart</span>
-            </Link>
-            <Link href="#" className="text-gray-700 hover:text-blue-600 font-medium">Checkout</Link>
+            <Link href="/products" className="text-gray-700 hover:text-blue-600 font-medium">Product Listings</Link>
           </nav>
 
           {/* Authentication Section */}
