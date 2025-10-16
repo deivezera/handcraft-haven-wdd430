@@ -102,6 +102,7 @@ export async function loginArtisan(data: LoginInput) {
     }
 
     // Return artisan data (excluding password)
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...artisanData } = artisan;
 
     return {

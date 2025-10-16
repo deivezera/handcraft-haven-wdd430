@@ -1,15 +1,13 @@
 import { Calendar, MapPin } from "lucide-react";
 
 interface EventCardProps {
-  id: string;
   title: string;
   description: string;
   date: string;
   location: string;
-  image: string | null;
 }
 
-export function EventCard({ id, title, description, date, location, image }: EventCardProps) {
+export function EventCard({ title, description, date, location }: EventCardProps) {
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
       <div className="aspect-video bg-gray-200 flex items-center justify-center">

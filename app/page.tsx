@@ -89,12 +89,10 @@ export default async function Home() {
             {upcomingEvents.map((event: EventItem) => (
               <EventCard
                 key={event.id}
-                id={event.id}
                 title={event.title}
                 description={event.description}
                 date={typeof event.date === 'string' ? event.date : event.date?.toISOString?.()}
                 location={event.location}
-                image={event.image ?? null}
               />
             ))}
           </div>

@@ -1,4 +1,4 @@
-import { Search, User, LogOut } from "lucide-react";
+import { User, LogOut } from "lucide-react";
 import { getCurrentArtisan, logoutAction } from "@/app/actions";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
